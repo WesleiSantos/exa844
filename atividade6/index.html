@@ -7,8 +7,7 @@
     <h1 align="center">Formulário de mensagens</h1>
     <hr />
     <br />
-    <form method="POST" action="http://localhost:8000/cgi-bin/form.py">
-      <input type="hidden" name="HTTP_DATE" value="" id="http-date-field" />
+    <form method="POST" action="http://10.65.215.64:8080/cgi-bin/blog.py">
       Autor: <br />
       <input type="text" size="64" name="autor" value="--autor--" /><br /><br />
       Mensagem: <br />
@@ -16,15 +15,5 @@
       ><br /><br />
       <input type="submit" /> <input type="reset" />
     </form>
-    <script>
-      // Obter o campo oculto para o cabeçalho HTTP_DATE
-      const httpDateField = document.getElementById("http-date-field");
-
-      // Obter o horário atual como uma string formatada
-      const httpDate = new Date().toUTCString();
-
-      // Definir o valor do campo oculto como o horário atual
-      httpDateField.value = httpDate;
-    </script>
   </body>
 </html>

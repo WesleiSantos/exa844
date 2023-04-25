@@ -1,0 +1,89 @@
+<html>
+  <head>
+    <title>My Blog</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="application/javascript">
+      function send(event) {
+        data = {
+          message: document.getElementById("msg").value,
+          author: document.getElementById("autor").value,
+        };
+        var json_data = JSON.stringify(data);
+
+        var header = {
+          "Cotent-Type": "application/json",
+        };
+
+        var url =
+          "https://script.google.com/macros/s/AKfycbzBn3sALe1rYjz7Ze-Ik7q9TEVP0I2V3XX7GNcecWP8NvCzGt4yO_RT1OlQp09TE9cU/exec";
+
+        fetch(url, {
+          method: "POST",
+          body: json_data,
+          headers: header,
+          mode: "no-cors",
+        }, {mode: 'no-cors'})
+          .then((response) => {
+            load();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+      function load() {
+        let table = document.getElementById("table");
+        let btn1 = document.getElementById("btnSend");
+        let btn2 = document.getElementById("btnLoad");
+        let numRows = table.rows.length - 1;
+        let data = [];
+        let url = `https://script.google.com/macros/s/AKfycbzBn3sALe1rYjz7Ze-Ik7q9TEVP0I2V3XX7GNcecWP8NvCzGt4yO_RT1OlQp09TE9cU/exec?tenho=${numRows}`;
+        let ajax = new XMLHttpRequest();
+        ajax.open("GET", url, true);
+        ajax.onload = function () {
+          if (this.status == 200) {
+            data = JSON.parse(this.responseText);
+            console.log(data);
+            insertRows(data.sort((a, b) => new Date(a[2]) - new Date(b[2])));
+          }else{
+            console.log("Erro");
+          }
+        };
+
+        ajax.send();
+      }
+      function insertRows(data){
+        let table = document.getElementById("table");
+        for (let i = 0; i < data.length; i++) {
+          let row = table.insertRow(1);
+          let cell1 = row.insertCell(0);
+          let cell2 = row.insertCell(1);
+          let cell3 = row.insertCell(2);
+          cell1.innerHTML = data[i][0];
+          cell2.innerHTML = data[i][1];
+          cell3.innerHTML = data[i][2];
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <h1 align="center">Mensagem:</h1>
+    <hr />
+    <br />
+    <form>
+      <label>Mensagem:</label>
+      <input type="text" size="64" name="msg" id="msg" /><br /><br />
+      <label>Autor:</label>
+      <input type="text" size="64" name="autor" id="autor" />
+      <br /><br />
+      <button type="button" name="btnSend" onclick="send()">Enviar</button>
+      <button type="button" name="btnLoad" onclick="load()">Carregar</button>
+    </form>
+    <table id="table">
+      <tr>
+        <th>Mensagem</th>
+        <th>Autor</th>
+        <th>Data</th>
+      </tr>
+    </table>
+  </body>
+</html>
